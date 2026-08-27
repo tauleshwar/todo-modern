@@ -18,7 +18,7 @@ export function useTasks() {
       const params = new URLSearchParams();
       if (searchQuery.trim()) params.set("search", searchQuery.trim());
       const query = params.toString();
-      const payload = await requestJson<TasksResponse>(apiUrl(`/api/tasks${query ? \`?\${query}\` : ""}`), { signal });
+      const payload = await requestJson<TasksResponse>(apiUrl(`/api/tasks${query ? `?${query}` : ""}`), { signal });
       setData(payload);
       setError(null);
     } catch (loadError) {

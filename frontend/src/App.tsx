@@ -38,8 +38,8 @@ export function App() {
 
   const selectedWeekKey = format(startOfWeek(selectedDay, { weekStartsOn: 1 }), "yyyy-MM-dd");
   const selectedWeek = useMemo<WeekGroup | null>(
-    () => data.weeks.find((week) => week.weekKey === selectedWeekKey) ?? null,
-    [data.weeks, selectedWeekKey],
+    () => data?.weeks.find((week) => week.weekKey === selectedWeekKey) ?? null,
+    [data?.weeks, selectedWeekKey],
   );
   const weekDays = useMemo(() => weekDaysFromMonday(selectedDay), [selectedDay]);
   const weekTasks = useMemo(() => selectedWeek?.tasks ?? [], [selectedWeek]);
@@ -48,7 +48,7 @@ export function App() {
     [selectedDay, weekTasks],
   );
   const listTasks = showAllInWeek ? weekTasks : dayTasks;
-  const searchTasks = data.tasks;
+  const searchTasks = data?.tasks ?? [];
   const completedCount = weekTasks.filter((task) => task.status === "COMPLETED").length;
   const pendingCount = weekTasks.length - completedCount;
   const progressPercent = weekTasks.length ? Math.round((completedCount / weekTasks.length) * 100) : 0;
