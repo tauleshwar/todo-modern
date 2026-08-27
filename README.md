@@ -2,7 +2,7 @@
 
 A mobile-first task planner built with independent frontend and backend projects. The app includes onboarding, a weekly dashboard, task creation and editing, search, checklist actions, and progress summaries.
 
-## Structure
+## Structure 
 
 | Directory | Purpose |
 | --- | --- |
