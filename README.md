@@ -1,6 +1,6 @@
 # Modern Todo
 
-A mobile-first task planner built as a TypeScript monorepo. The app includes onboarding, a weekly dashboard, task creation and editing, search, checklist actions, and progress summaries.
+A mobile-first task planner built with independent frontend and backend projects. The app includes onboarding, a weekly dashboard, task creation and editing, search, checklist actions, and progress summaries.
 
 ## Structure
 
@@ -19,53 +19,58 @@ The UI is designed around a 390px mobile viewport and expands into a centered ap
 
 ## Setup
 
-1. Copy `.env.example` to `.env`.
-2. Set `MONGO_URL` and `MONGO_DB` in `.env`. Keep this file private; it is ignored by Git.
-3. Install and run the workspace:
+Since the frontend and backend are completely decoupled, you will need to set up and run both projects independently in separate terminal windows.
 
+### Backend Setup
+1. Navigate to the backend directory: `cd backend`
+2. Copy `.env.example` to `.env`.
+3. Set `MONGO_URL` and `MONGO_DB` in `.env`. Keep this file private; it is ignored by Git.
+4. Install dependencies and start the server:
 ```bash
 npm install
 npm run dev
 ```
 
-The frontend runs at `http://localhost:5173` and proxies `/api` requests to the backend at `http://localhost:4000`.
+### Frontend Setup
+1. Navigate to the frontend directory: `cd frontend`
+2. Copy `.env.example` to `.env` (it contains `VITE_API_URL` pointing to the backend).
+3. Install dependencies and start the dev server:
+```bash
+npm install
+npm run dev
+```
+
+The frontend runs at `http://localhost:5173` and requests data from the backend at `http://localhost:4000`.
 
 The backend requires a reachable MongoDB database before task data can be loaded or changed. The health endpoint does not require a database connection.
 
-## Netlify deployment
+## Deployment
 
-The Vite frontend is ready for Netlify. The included `netlify.toml` uses `frontend/dist` as the publish directory, runs the frontend build, and enables client-side route fallback.
+Because the projects are decoupled, they must be deployed independently.
 
-The Express/MongoDB backend is not deployed by Netlify's static hosting. Deploy it separately on a Node-compatible host, then set this Netlify environment variable:
+### Frontend (Netlify / Vercel)
+The Vite frontend can be deployed statically to Netlify or Vercel. 
+- Point your deployment platform to the `frontend` directory.
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Environment Variables: Set `VITE_API_URL=https://your-public-api.example.com`
 
-```text
-VITE_API_URL=https://your-public-api.example.com
-```
-
-Set the backend's `CLIENT_ORIGIN` to the Netlify site URL, for example `https://your-site.netlify.app`. Configure `MONGO_URL`, `MONGO_DB`, and `PORT` on the backend host. After setting `VITE_API_URL`, trigger a new Netlify deploy because Vite embeds it during the build.
-
-For a single-host deployment, build both workspaces and run the backend in production; Netlify alone is not sufficient for that arrangement without migrating the API routes to Netlify Functions.
-
-### Run each workspace separately
-
-```bash
-npm run dev --workspace frontend
-npm run dev --workspace backend
-```
-
-The combined root command is recommended for normal development.
+### Backend (Render / Railway / Heroku)
+The Express/MongoDB backend must be deployed to a Node-compatible hosting platform.
+- Point your deployment platform to the `backend` directory.
+- Build command: `npm run build`
+- Start command: `npm run start`
+- Environment Variables: Set `MONGO_URL`, `MONGO_DB`, `PORT`, and `CLIENT_ORIGIN` (to your frontend's deployed URL).
 
 ## Commands
 
-```bash
-npm run dev        # frontend and backend with watch mode
-npm run lint       # lint both projects
-npm run typecheck  # type-check both projects
-npm run build      # create production frontend and backend builds
-npm run start      # serve the production API and built frontend
-```
+Commands must be run inside their respective `frontend` or `backend` directories.
 
-`npm run start` expects both production builds to exist. Run `npm run build` first.
+```bash
+npm run dev        # Run the dev server with watch mode
+npm run build      # Create a production build
+npm run start      # (Backend only) Serve the production API
+```
 
 ## Frontend behavior
 
@@ -121,11 +126,10 @@ Successful task responses contain a serialized task with `id`, `title`, `descrip
 
 ## Verification
 
-Run the complete local checks with:
+Run the complete local checks in each directory with:
 
 ```bash
-npm run typecheck
-npm run lint
+npx tsc --noEmit
 npm run build
 ```
 
