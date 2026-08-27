@@ -8,7 +8,6 @@ A mobile-first task planner built with independent frontend and backend projects
 | --- | --- |
 | `frontend/` | React + TypeScript + Vite + Tailwind CSS application |
 | `backend/` | Node.js + Express + TypeScript + MongoDB/Mongoose API |
-| `archive/` | Preserved legacy Next.js project snapshots |
 
 The UI is designed around a 390px mobile viewport and expands into a centered app canvas on wider screens. Dashboard and onboarding artwork is stored in `frontend/src/assets/ui/`.
 
@@ -135,6 +134,3 @@ npm run build
 
 For a live persistence check, verify `GET /api/health`, then create, update, and delete a temporary task through the API.
 
-## Legacy archive
-
-The former Next.js/Prisma project was archived before the migration. See `archive/README.md` for the snapshot contents.
